@@ -96,6 +96,6 @@ Hasil audit BACA-SAJA: cek hanya temuan yang akan diperbaiki, lalu delegasikan p
 
 ## Catatan lingkungan (contoh Windows, sesuaikan)
 
-- `agy` ada di `C:\Users\Rahmad pengguna\AppData\Local\agy\bin\agy`.
+- `agy` biasanya ada di `%LOCALAPPDATA%\agy\bin\agy`.
 - Build Gradle/Flutter di sandbox gagal "Unable to establish loopback connection": jalankan di luar sandbox
   dengan `TMP=C:\gtmp TEMP=C:\gtmp JAVA_TOOL_OPTIONS='-Djdk.net.unixdomain.tmpdir=C:\gtmp -Djava.io.tmpdir=C:\gtmp'`.
