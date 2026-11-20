@@ -1,24 +1,55 @@
-# Claude Code Skills Ofi Labs
+# Claude Delegator
 
-| Skill | Fungsi |
-|---|---|
-| `gemini-eksekutor` | Mendelegasikan pekerjaan ke Gemini lewat CLI Antigravity (`agy`) untuk menghemat token Claude, lalu mengaudit hasilnya. |
-| `atur-model` | Memilih model Claude (Opus, Sonnet, Haiku) dan effort sesuai berat pekerjaan agar hemat token, termasuk kapan memindahkan kerja ke subagent atau Gemini. |
+**EN** · Two Claude Code skills that cut token use: hand repetitive work to Gemini through the Antigravity CLI (`agy`) with a cheap pass/fail check, and pick the right Claude model (Opus, Sonnet, Haiku) and effort for each job.
 
-## Cara pasang
+**ID** · Dua skill Claude Code untuk hemat token: serahkan pekerjaan repetitif ke Gemini lewat CLI Antigravity (`agy`) dengan cek lulus/gagal yang murah, dan pilih model Claude (Opus, Sonnet, Haiku) serta effort yang pas untuk tiap pekerjaan.
 
-Salin folder di `skills/` ke `~/.claude/skills/` (global, semua proyek) atau ke `.claude/skills/` di root proyek (hanya proyek itu).
+> The skill text is written in Bahasa Indonesia. Claude reads it fine in any language. / Isi skill berbahasa Indonesia.
+
+## Skills
+
+| Skill | EN | ID |
+|---|---|---|
+| `gemini-eksekutor` | Delegate repetitive or mechanical work to Gemini via `agy`, then check it with one command (report, changed files, analyzer, tests) instead of re-reading everything. | Delegasikan pekerjaan repetitif ke Gemini lewat `agy`, lalu cek dengan satu perintah (laporan, berkas yang berubah, analisis, tes) tanpa membaca ulang semuanya. |
+| `atur-model` | Route work by weight: `opusplan` (Opus plans, Sonnet executes), Haiku/Sonnet/Opus subagents with matching effort, Gemini for bulk work. | Atur pekerjaan sesuai beratnya: `opusplan` (Opus merencanakan, Sonnet mengeksekusi), subagent Haiku/Sonnet/Opus dengan effort yang sesuai, Gemini untuk kerja massal. |
+
+## Install / Pasang
 
 ```bash
-git clone https://github.com/riyadiambis/claude-skills.git
-cd claude-skills
-mkdir -p ~/.claude/skills
-cp -r skills/* ~/.claude/skills/
+git clone https://github.com/riyadiambis/claude-delegator.git
+cp -r claude-delegator/skills/* ~/.claude/skills/      # all projects / semua proyek
+# or / atau: cp -r claude-delegator/skills/* <project>/.claude/skills/
 ```
 
-Lalu mulai ulang Claude Code.
+Restart Claude Code. / Mulai ulang Claude Code.
 
-## Catatan
+Optional setting / Pengaturan opsional (`~/.claude/settings.json`):
 
-- `gemini-eksekutor` butuh CLI Antigravity (`agy`) terpasang dan sudah login.
-- Bagian "Catatan lingkungan" di skill itu khusus laptop pemilik; sesuaikan di mesin lain.
+```json
+{ "model": "opusplan", "effortLevel": "medium" }
+```
+
+## Requirements / Kebutuhan
+
+- [Claude Code](https://docs.claude.com/en/docs/claude-code)
+- For `gemini-eksekutor`: Antigravity CLI (`agy`) installed and signed in. Check models with `agy models`. / Untuk `gemini-eksekutor`: CLI Antigravity (`agy`) terpasang dan sudah login.
+- The "Catatan lingkungan" section in `gemini-eksekutor` holds Windows examples; adjust paths to your machine. / Sesuaikan path di bagian "Catatan lingkungan" dengan mesinmu.
+
+## Recommended companion: Ponytail / Pendamping yang disarankan
+
+[Ponytail](https://github.com/DietrichGebert/ponytail) (MIT, by DietrichGebert) makes agents write the smallest change that fully solves the task, which pairs well with cheap delegation. Install it in both agents so Claude and Gemini follow the same rules. / Ponytail membuat agen menulis perubahan terkecil yang menyelesaikan tugas, cocok dipadukan dengan delegasi hemat. Pasang di kedua agen supaya Claude dan Gemini memakai aturan yang sama.
+
+```bash
+# Claude Code
+claude plugin marketplace add DietrichGebert/ponytail
+claude plugin install ponytail@ponytail
+
+# Antigravity CLI (agy) — if it fails with "Access is denied", run it again
+agy plugin install https://github.com/DietrichGebert/ponytail
+```
+
+Antigravity has no always-on hook for Ponytail; for always-on rules copy Ponytail's `AGENTS.md` into your project. / Di Antigravity, Ponytail tidak aktif terus-menerus; salin `AGENTS.md` milik Ponytail ke proyekmu untuk aturan yang selalu aktif.
+
+## License / Lisensi
+
+MIT
