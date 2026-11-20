@@ -1,6 +1,6 @@
 ---
 name: gemini-eksekutor
-description: Delegasikan pekerjaan ke Gemini lewat CLI Antigravity (agy) untuk hemat token Claude, lalu audit hasilnya. Pakai saat tugas repetitif atau mekanis (banyak berkas serupa, boilerplate, rename massal, dokumentasi, terjemahan), saat butuh audit kode baca-saja dari model lain, atau saat Riyadi bilang "pakai Gemini", "suruh agy", "hemat token".
+description: Delegasikan pekerjaan ke Gemini lewat CLI Antigravity (agy) untuk hemat token Claude, lalu audit hasilnya. Pakai saat tugas repetitif atau mekanis (banyak berkas serupa, boilerplate, rename massal, dokumentasi, terjemahan), saat butuh audit kode baca-saja dari model lain, atau saat pengguna bilang "pakai Gemini", "suruh agy", "hemat token".
 ---
 
 # Gemini Eksekutor (agy)
@@ -21,7 +21,7 @@ Tugas kecil (kurang dari ~3 berkas atau ~100 baris) lebih murah dikerjakan sendi
 
 ## Pilih model dan effort
 
-Cek daftar terbaru dengan `agy models` bila ragu. Gemini 3.8 Flash tidak dipakai (keputusan Riyadi).
+Cek daftar terbaru dengan `agy models` bila ragu. Gemini 3.8 Flash tidak dipakai.
 
 | Tugas | Model |
 |---|---|
@@ -45,7 +45,7 @@ agy -p "$(cat <berkas-prompt>)" --model gemini-4-hydrogen-xhigh --mode plan --pr
 - Butuh membaca folder di luar repo (mockup, referensi): tambah `--add-dir <folder>`.
 - **Dilarang** `--dangerously-skip-permissions`.
 - Sebelum mendelegasikan tugas menulis kode: commit dulu pekerjaan Claude, supaya diff Gemini terlihat bersih (`git diff`).
-- Proses macet atau arah berubah: hentikan dengan TaskStop, cek `git status`, buang perubahan setengah jadi hanya bila Riyadi setuju.
+- Proses macet atau arah berubah: hentikan dengan TaskStop, cek `git status`, buang perubahan setengah jadi hanya bila pengguna setuju.
 
 ## Bentuk prompt (wajib lengkap; Gemini tidak melihat percakapan ini)
 
@@ -90,12 +90,12 @@ Lolos = langsung commit `feat(issue-NN): ... (draf Gemini)` dan lanjut. Tidak me
 **Jangan:**
 - Membaca seluruh laporan Gemini atau seluruh diff untuk tugas rutin.
 - Menjalankan audit Gemini kedua untuk tiap tugas; audit hanya di akhir ISSUE besar atau bila diminta.
-- Memverifikasi ulang tampilan dengan screenshot kecuali Riyadi minta.
+- Memverifikasi ulang tampilan dengan screenshot kecuali pengguna minta.
 
 Hasil audit BACA-SAJA: cek hanya temuan yang akan diperbaiki, lalu delegasikan perbaikannya ke Gemini.
 
-## Catatan lingkungan (laptop Riyadi, Windows)
+## Catatan lingkungan (contoh Windows, sesuaikan)
 
-- `agy` ada di `C:\Users\Rahmad Riyadi\AppData\Local\agy\bin\agy`.
+- `agy` ada di `C:\Users\Rahmad pengguna\AppData\Local\agy\bin\agy`.
 - Build Gradle/Flutter di sandbox gagal "Unable to establish loopback connection": jalankan di luar sandbox
   dengan `TMP=C:\gtmp TEMP=C:\gtmp JAVA_TOOL_OPTIONS='-Djdk.net.unixdomain.tmpdir=C:\gtmp -Djava.io.tmpdir=C:\gtmp'`.

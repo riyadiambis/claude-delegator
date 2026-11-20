@@ -1,12 +1,12 @@
 ---
 name: atur-model
-description: Pilih model Claude (Opus, Sonnet, Haiku) dan effort sesuai berat pekerjaan agar hemat token, termasuk kapan memindahkan kerja ke subagent Sonnet/Haiku atau ke Gemini. Pakai di awal tugas yang besar atau berulang, saat merencanakan pembagian kerja, atau saat Riyadi bilang "hemat token", "pakai Sonnet", "atur model", "sesuaikan effort".
+description: Pilih model Claude (Opus, Sonnet, Haiku) dan effort sesuai berat pekerjaan agar hemat token, termasuk kapan memindahkan kerja ke subagent Sonnet/Haiku atau ke Gemini. Pakai di awal tugas yang besar atau berulang, saat merencanakan pembagian kerja, atau saat pengguna bilang "hemat token", "pakai Sonnet", "atur model", "sesuaikan effort".
 ---
 
 # Atur Model dan Effort
 
 Tujuan: pekerjaan berat dipikir oleh model kuat, pekerjaan ringan dikerjakan model murah.
-Riyadi sudah mengizinkan memilih model dan effort sendiri sesuai kebutuhan (izin berlaku untuk parameter `model` dan `effort` pada subagent).
+Pengguna sudah mengizinkan memilih model dan effort sendiri sesuai kebutuhan (izin berlaku untuk parameter `model` dan `effort` pada subagent).
 
 ## Lapisan 1: otomatis dari pengaturan (sudah aktif)
 
@@ -15,7 +15,7 @@ Riyadi sudah mengizinkan memilih model dan effort sendiri sesuai kebutuhan (izin
 - **Di luar plan mode** memakai Sonnet (mengeksekusi).
 
 Jadi pekerjaan besar: masuk plan mode dulu (EnterPlanMode) untuk merancang dengan Opus, lalu keluar
-untuk eksekusi dengan Sonnet. Jangan mengubah pengaturan ini tanpa izin Riyadi.
+untuk eksekusi dengan Sonnet. Jangan mengubah pengaturan ini tanpa izin pengguna.
 Pengguna bisa ganti manual kapan saja dengan `/model` atau `/effort`.
 
 ## Lapisan 2: subagent dengan model dan effort pilihan
@@ -51,4 +51,4 @@ Tugas repetitif skala besar atau audit pendapat kedua: pakai skill `gemini-eksek
 
 `musistudio/claude-code-router` tidak dipasang (keputusan 2026-11-20): opusplan sudah menangani
 Opus dan Sonnet, sedangkan router menyalurkan semua lalu lintas lewat proxy lokal dan biasanya butuh
-kunci API penyedia lain. Pasang hanya bila Riyadi minta dan setelah menjelaskan apa yang diubahnya.
+kunci API penyedia lain. Pasang hanya bila pengguna minta dan setelah menjelaskan apa yang diubahnya.
