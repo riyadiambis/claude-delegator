@@ -55,19 +55,44 @@ BACA DULU: AGENTS.md, <docs acuan>, <berkas kode yang jadi pola>.
 LARANGAN KERAS: jangan jalankan git; jangan ubah pubspec/package.json; jangan tambah paket;
 jangan sentuh <folder terlarang>; <aturan proyek, mis. warna hanya dari token tema>.
 BERKAS YANG DITULIS: 1. <path>: <isi spesifik>  2. ...
-AKHIRI dengan LAPORAN: satu baris per berkas [LULUS/GAGAL] nomor, berkas, catatan; plus daftar keraguan.
+WAJIB SEBELUM SELESAI: jalankan analisis dan tes proyek sampai bersih, perbaiki sendiri bila gagal.
+AKHIRI dengan LAPORAN maksimal 10 baris, tepat di akhir keluaran:
+VONIS: LULUS|GAGAL
+UJI: <ringkasan analyze, jumlah tes lulus/gagal>
+BERKAS: <daftar berkas yang diubah>
+RAGU: <hal yang perlu dicek Claude, atau "tidak ada">
 ```
 
 Prompt audit diawali `BACA-SAJA.` dan meminta setiap temuan memuat `berkas:baris`, contoh pemicu
 konkret, dan perbaikan terkecil. Temuan tanpa pemicu tidak dilaporkan.
 
-## Setelah Gemini selesai
+## Setelah Gemini selesai: cek hemat
 
-1. Baca laporan (`tail` berkas laporan). Exit code 0 tidak berarti berhasil.
-2. `git status` dan `git diff --stat`: pastikan hanya berkas yang diizinkan berubah.
-3. Jalankan analisis dan tes proyek sendiri (Gemini mungkin tidak menjalankannya).
-4. Audit: cek setiap temuan di kode sebelum memperbaiki. Laporkan ke Riyadi mana yang valid.
-5. Commit dengan pesan yang menyebut asal: `feat(issue-NN): ... (draf Gemini, dicek Claude)`.
+Tujuan delegasi adalah hemat token Claude. Jangan membaca ulang semua yang dikerjakan Gemini.
+Gemini sendiri yang wajib menjalankan analisis dan tes (lihat bentuk prompt).
+
+**Cek standar (selalu, satu perintah, keluaran ~5 baris):**
+
+```bash
+tail -6 <laporan>.txt; git status --short; <perintah analisis> | tail -1; <perintah tes> | tail -1
+```
+
+Lolos bila: VONIS LULUS, berkas yang berubah sesuai daftar yang diizinkan, analisis bersih, tes lulus.
+Lolos = langsung commit `feat(issue-NN): ... (draf Gemini)` dan lanjut. Tidak membaca diff.
+
+**Cek dalam (hanya bila salah satu terjadi):**
+- Cek standar gagal: baca bagian laporan yang relevan saja, lalu kirim perbaikan balik ke Gemini
+  (prompt pendek berisi galatnya) daripada memperbaiki sendiri, kecuali perbaikannya 1-2 baris.
+- Ada berkas di luar daftar yang berubah: `git diff --stat`, kembalikan yang tidak diizinkan.
+- RAGU menyebut hal berisiko, atau tugasnya menyentuh keamanan, data pengguna, uang, atau skema
+  basis data: baca diff berkas itu saja (`git diff -- <berkas>`), bukan semua.
+
+**Jangan:**
+- Membaca seluruh laporan Gemini atau seluruh diff untuk tugas rutin.
+- Menjalankan audit Gemini kedua untuk tiap tugas; audit hanya di akhir ISSUE besar atau bila diminta.
+- Memverifikasi ulang tampilan dengan screenshot kecuali Riyadi minta.
+
+Hasil audit BACA-SAJA: cek hanya temuan yang akan diperbaiki, lalu delegasikan perbaikannya ke Gemini.
 
 ## Catatan lingkungan (laptop Riyadi, Windows)
 
