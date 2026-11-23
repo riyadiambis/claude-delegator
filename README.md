@@ -13,6 +13,12 @@
 | `gemini-eksekutor` | Delegate repetitive or mechanical work to Gemini via `agy`, then check it with one command (report, changed files, analyzer, tests) instead of re-reading everything. | Delegasikan pekerjaan repetitif ke Gemini lewat `agy`, lalu cek dengan satu perintah (laporan, berkas yang berubah, analisis, tes) tanpa membaca ulang semuanya. |
 | `atur-model` | Route work by weight: `opusplan` (Opus plans, Sonnet executes), Haiku/Sonnet/Opus subagents with matching effort, Gemini for bulk work. | Atur pekerjaan sesuai beratnya: `opusplan` (Opus merencanakan, Sonnet mengeksekusi), subagent Haiku/Sonnet/Opus dengan effort yang sesuai, Gemini untuk kerja massal. |
 
+## Limits / Batas
+
+**EN** · A skill is guidance text; it cannot switch the running session's model. Real switching only comes from `opusplan` in settings, `/model` and `/effort` typed by you, the `model`/`effort` parameters on subagents, and `agy` for Gemini. `atur-model` is written around these four. `opusplan` may be ignored in the desktop app or Cowork; check the active model.
+
+**ID** · Skill hanya teks panduan; tidak bisa mengganti model sesi yang berjalan. Pergantian nyata hanya dari `opusplan`, `/model` dan `/effort` yang kamu ketik, parameter `model`/`effort` pada subagent, dan `agy` untuk Gemini. `opusplan` bisa tidak berlaku di aplikasi desktop atau Cowork; cek model aktif.
+
 ## Install / Pasang
 
 ```bash

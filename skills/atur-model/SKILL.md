@@ -1,51 +1,61 @@
 ---
 name: atur-model
-description: Pilih model Claude (Opus, Sonnet, Haiku) dan effort sesuai berat pekerjaan agar hemat token, termasuk kapan memindahkan kerja ke subagent Sonnet/Haiku atau ke Gemini. Pakai di awal tugas yang besar atau berulang, saat merencanakan pembagian kerja, atau saat pengguna bilang "hemat token", "pakai Sonnet", "atur model", "sesuaikan effort".
+description: Pilih model Claude (Fable, Opus, Sonnet, Haiku) dan effort sesuai berat pekerjaan agar hemat token, termasuk kapan memindahkan kerja ke subagent atau ke Gemini. WAJIB dipakai di awal setiap tugas yang lebih dari ~3 langkah (kode banyak berkas, riset, reverse engineering, build berulang), saat merencanakan pembagian kerja, atau saat pengguna bilang "hemat token", "pakai Sonnet", "atur model", "sesuaikan effort", "limit habis".
 ---
 
 # Atur Model dan Effort
 
-Tujuan: pekerjaan berat dipikir oleh model kuat, pekerjaan ringan dikerjakan model murah.
-Pengguna sudah mengizinkan memilih model dan effort sendiri sesuai kebutuhan (izin berlaku untuk parameter `model` dan `effort` pada subagent).
+Tujuan: pekerjaan berat dipikir model kuat, pekerjaan ringan dikerjakan model murah.
+Pengguna sudah mengizinkan memilih `model` dan `effort` pada subagent sendiri sesuai kebutuhan.
 
-## Lapisan 1: otomatis dari pengaturan (sudah aktif)
+## Batas jujur (baca dulu)
 
-`~/.claude/settings.json` berisi `"model": "opusplan"` dan `"effortLevel": "medium"`:
-- **Plan mode** memakai Opus (merancang, memutuskan).
-- **Di luar plan mode** memakai Sonnet (mengeksekusi).
+Skill ini hanya teks panduan. Claude TIDAK bisa mengganti model sesi yang sedang berjalan.
+Yang benar-benar mengganti model hanya empat hal:
 
-Jadi pekerjaan besar: masuk plan mode dulu (EnterPlanMode) untuk merancang dengan Opus, lalu keluar
-untuk eksekusi dengan Sonnet. Jangan mengubah pengaturan ini tanpa izin pengguna.
-Pengguna bisa ganti manual kapan saja dengan `/model` atau `/effort`.
+| Mekanisme | Siapa yang menjalankan | Berlaku |
+|---|---|---|
+| `"model": "opusplan"` di settings | otomatis | plan mode = Opus, di luar plan mode = Sonnet |
+| `/model`, `/effort` | pengguna (ketik sendiri) | seluruh sesi |
+| Parameter `model` + `effort` pada tool Agent | Claude | hanya subagent itu |
+| `agy` (skill `gemini-eksekutor`) | Claude | di luar Claude |
 
-## Lapisan 2: subagent dengan model dan effort pilihan
+Catatan: `opusplan` bisa tidak berlaku di aplikasi desktop atau Cowork. Cek model aktif di awal tugas besar.
+Bila sesi masih Sonnet padahal tugasnya berat (desain, arsitektur, reverse engineering), JANGAN diam saja:
+katakan satu kalimat "tugas ini berat, ketik `/model opus`" lalu lanjut setelah pengguna mengganti.
 
-Pakai tool Agent dengan parameter `model` dan `effort` untuk memisahkan kerja:
+## Aturan utama: sesi utama tetap murah
+
+Tugas baca banyak, cari luas, atau loop build/tes berulang membengkakkan konteks sesi utama.
+Pindahkan ke subagent supaya hanya ringkasannya yang kembali ke sesi utama.
+Sesi utama dipakai untuk keputusan, bukan untuk membaca keluaran panjang.
+
+## Subagent: model dan effort
+
+Tool Agent, parameter `model` (`haiku` | `sonnet` | `opus` | `fable`) dan `effort`:
 
 | Pekerjaan | model | effort |
 |---|---|---|
 | Cari berkas, petakan kode, "di mana X dipakai" | `haiku` | `low` |
 | Ringkas dokumen, baca log panjang, cek format | `haiku` | `low` |
 | Ubah mekanis 1-2 berkas yang jelas, tulis tes dari pola | `sonnet` | `medium` |
-| Implementasi fitur mengikuti desain/ISSUE yang sudah jelas | `sonnet` | `high` |
+| Implementasi fitur mengikuti desain yang sudah jelas | `sonnet` | `high` |
 | Review kode, cari bug halus, audit keamanan | `opus` | `high` |
-| Keputusan arsitektur, rencana besar, masalah buntu | `opus` | `xhigh` |
+| Keputusan arsitektur, masalah buntu, analisis hasil dekompilasi | `opus` atau `fable` | `xhigh` |
 
 Aturan:
-- Subagent mulai dari nol: tulis brief lengkap (berkas, tujuan, batasan, bentuk hasil). Brief panjang = token juga.
-- Tugas yang selesai dalam beberapa langkah: kerjakan sendiri, jangan buat subagent.
-- Hasil subagent tetap dicek sebelum dipakai.
+- Subagent mulai dari nol: brief lengkap (berkas, tujuan, batasan, bentuk hasil, batas panjang laporan).
+- Selesai dalam 1-3 langkah: kerjakan sendiri, jangan buat subagent.
+- Hasil subagent dicek singkat sebelum dipakai.
+- Pekerjaan banyak berkas mekanis atau audit pendapat kedua: skill `gemini-eksekutor`.
 
-## Lapisan 3: keluar dari Claude
+## Urutan memutuskan (jalankan di awal tugas)
 
-Tugas repetitif skala besar atau audit pendapat kedua: pakai skill `gemini-eksekutor` (Gemini lewat agy).
-
-## Urutan memutuskan
-
-1. Bisa selesai dalam beberapa langkah? Kerjakan langsung, effort sekarang.
-2. Butuh pencarian luas? Subagent `haiku`.
-3. Banyak berkas mekanis? Gemini (`gemini-eksekutor`) atau subagent `sonnet`.
-4. Butuh penilaian sulit? Plan mode (Opus) atau subagent `opus`.
+1. Selesai dalam 1-3 langkah? Kerjakan langsung.
+2. Perlu membaca/mencari banyak? Subagent `haiku`.
+3. Banyak berkas mekanis? Gemini atau subagent `sonnet`.
+4. Butuh penilaian sulit? Cek model sesi; bila bukan Opus, minta `/model opus` atau pakai subagent `opus`.
+5. Satu kalimat ke pengguna: rencana pembagian dan alasannya, lalu jalan.
 
 ## Claude Code Router
 
