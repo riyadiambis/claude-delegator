@@ -41,6 +41,11 @@ Optional setting / Pengaturan opsional (`~/.claude/settings.json`):
 - For `gemini-eksekutor`: Antigravity CLI (`agy`) installed and signed in. Check models with `agy models`. / Untuk `gemini-eksekutor`: CLI Antigravity (`agy`) terpasang dan sudah login.
 - The "Catatan lingkungan" section in `gemini-eksekutor` holds Windows examples; adjust paths to your machine. / Sesuaikan path di bagian "Catatan lingkungan" dengan mesinmu.
 
+## Also worth installing / Layak dipasang juga
+
+- [RTK](https://github.com/rtk-ai/rtk) (Apache-2.0 + BUSL-1.1 for Pro edition): compresses shell command output before it enters context. `winget install rtk-ai.rtk`, then `rtk init -g`, restart Claude Code, check with `rtk gain`. It patches `~/.claude/settings.json` (backup is made); review before installing.
+- RTK memangkas keluaran perintah shell sebelum masuk konteks. Ia mengubah `~/.claude/settings.json` (ada cadangan); periksa dulu sebelum memasang.
+
 ## Recommended companion: Ponytail / Pendamping yang disarankan
 
 [Ponytail](https://github.com/DietrichGebert/ponytail) (MIT, by DietrichGebert) makes agents write the smallest change that fully solves the task, which pairs well with cheap delegation. Install it in both agents so Claude and Gemini follow the same rules. / Ponytail membuat agen menulis perubahan terkecil yang menyelesaikan tugas, cocok dipadukan dengan delegasi hemat. Pasang di kedua agen supaya Claude dan Gemini memakai aturan yang sama.

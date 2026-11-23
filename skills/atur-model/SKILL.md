@@ -57,6 +57,14 @@ Aturan:
 4. Butuh penilaian sulit? Cek model sesi; bila bukan Opus, minta `/model opus` atau pakai subagent `opus`.
 5. Satu kalimat ke pengguna: rencana pembagian dan alasannya, lalu jalan.
 
+## Perantara berkas (hemat brief dan hasil)
+
+Konteks yang dipakai berulang (keputusan, batasan, path penting) ditulis sekali ke satu berkas,
+misalnya `<scratchpad>/konteks-<proyek>.md`. Brief subagent cukup: "baca <berkas>, kerjakan X".
+Minta subagent menulis hasil panjang ke berkas lain dan membalas maksimal 10 baris plus path-nya.
+Pakai hanya bila konteks yang sama dipakai 2 subagent atau lebih, atau lintas sesi.
+Tugas sekali jalan: brief biasa (membaca berkas tidak lebih murah dari brief). Jangan simpan rahasia.
+
 ## Claude Code Router
 
 `musistudio/claude-code-router` tidak dipasang (keputusan 2026-11-20): opusplan sudah menangani
